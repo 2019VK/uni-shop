@@ -110,7 +110,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .my-search-box {
     position: sticky;
     top: 0;

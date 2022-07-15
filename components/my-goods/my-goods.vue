@@ -36,7 +36,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .goods-item {
     display: flex;
     padding: 10px 5px;

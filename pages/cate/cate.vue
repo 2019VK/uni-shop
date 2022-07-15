@@ -92,7 +92,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .scoll-view-container {
     display: flex;
 

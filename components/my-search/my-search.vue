@@ -40,7 +40,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .my-search-container {
   height: 50px;
   // background-color: #C00000;
