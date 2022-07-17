@@ -34,6 +34,8 @@
 </template>
 
 <script>
+  import { mapState,mapMutations,mapGetters } from 'vuex'
+  
   export default {
     data() {
       return {
@@ -47,7 +49,7 @@
         }, {
           icon: 'cart',
           text: '购物车',
-          info: 2
+          info: 0
         }],
         buttonGroup: [{
             text: '加入购物车',
@@ -62,12 +64,32 @@
         ]
       };
     },
+    computed:{
+      // 读取store中的数据
+      ...mapState('Cart',['cart']),
+      ...mapGetters('Cart',['total'])
+    },
+    watch:{
+      // 监听购物车里的商品总数，变化更新显示
+      total:{
+        handler(newVal){
+          const findRes = this.options.find(x => x.text === '购物车')
+          if(findRes){
+            findRes.info = newVal
+          }
+        },
+        // 上来立即监听一下
+        immediate:true
+      }
+    },
     // 初始化商品信息
     onLoad(options) {
       const goods_id = options.goods_id
       this.getGoodsInfo(goods_id)
     },
     methods: {
+      // 引入vuex的方法
+      ...mapMutations('Cart',['addCart']),
       // 向服务器发请求，获取商品信息
       async getGoodsInfo(goods_id) {
         const res = await uni.$http.get('/api/public/v1/goods/detail', {
@@ -87,11 +109,19 @@
       },
       // 跳转购物车界面
       onClick(e) {
-        console.log(e);
         if (e.content.text === '购物车') {
           uni.switchTab({
             url: '/pages/cart/cart'
           })
+        }
+      },
+      // 添加购物车函数
+      buttonClick(e){
+        if(e.content.text === '加入购物车'){
+          // 解构赋值
+          const {goods_id, goods_name, goods_price, goods_count=1, goods_small_logo, goods_state=true} = this.goodsInfo
+          const goods = { goods_id, goods_name, goods_price, goods_count, goods_small_logo, goods_state }
+          this.addCart(goods)
         }
       }
     }
